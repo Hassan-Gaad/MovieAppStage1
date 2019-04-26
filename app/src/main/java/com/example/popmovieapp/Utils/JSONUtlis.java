@@ -1,7 +1,5 @@
 package com.example.popmovieapp.Utils;
 
-import android.content.Context;
-
 import com.example.popmovieapp.Movie;
 
 import org.json.JSONArray;
@@ -30,22 +28,21 @@ public class JSONUtlis {
 
 
         for (int i = 0; i < movieJSONArr.length(); i++){
-            String title ,poster_path,overview,vote_average,release_date;
 
             Movie movie = new Movie();
-            title = movieJSONArr.getJSONObject(i).getString(TITLE);
-            poster_path = movieJSONArr.getJSONObject(i).getString(POSTER_PATH);
-            overview = movieJSONArr.getJSONObject(i).getString(OVERVIEW);
-            release_date = movieJSONArr.getJSONObject(i).getString(RELEASE_DATE);
-            vote_average = movieJSONArr.getJSONObject(i).getString(VOTE);
+            String title = movieJSONArr.getJSONObject(i).getString(TITLE);
+            String posterPath = movieJSONArr.getJSONObject(i).getString(POSTER_PATH);
+            String overview = movieJSONArr.getJSONObject(i).getString(OVERVIEW);
+            String releaseDate = movieJSONArr.getJSONObject(i).getString(RELEASE_DATE);
+            String voteAverage = movieJSONArr.getJSONObject(i).getString(VOTE);
 
             movie.setTitle(title);
             //Combining these three parts gives us a final url of
             //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
-            movie.setPoster(BASE_URL + POSTER_SIZE + poster_path);
+            movie.setPoster(BASE_URL + POSTER_SIZE + posterPath);
             movie.setOverview(overview);
-            movie.setRelease(release_date);
-            movie.setRate(vote_average);
+            movie.setRelease(releaseDate);
+            movie.setRate(voteAverage);
 
             allMoviesArr[i] = movie;
         }

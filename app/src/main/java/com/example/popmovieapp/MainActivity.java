@@ -2,6 +2,8 @@ package com.example.popmovieapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,9 +46,19 @@ public class MainActivity extends AppCompatActivity implements movieAdapter.item
         movieAdapter=new movieAdapter(movies,MainActivity.this) ;
         recyclerView.setAdapter(movieAdapter);
         progressBar=findViewById(R.id.progressBar3);
+
         getMovieData();
 
 
+    }
+
+    public  boolean isConnected(){
+        ConnectivityManager connectivityManager=(ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager!=null){
+            NetworkInfo info=connectivityManager.getActiveNetworkInfo();
+            return info != null && info.isConnected();
+        }
+        return false;
     }
 
     @Override
@@ -68,13 +80,14 @@ public class MainActivity extends AppCompatActivity implements movieAdapter.item
 
     private void getMovieData() {
         String querySearch = defaultQuery;
-        showRecyclerView();
-        new MovieQueryTask().execute(querySearch);
+        if (isConnected()) {
+            new MovieQueryTask().execute(querySearch);
+        }else {
+            Toast.makeText(MainActivity.this, "No network connection", Toast.LENGTH_SHORT).show();
+
+        }
     }
 
-    private void showRecyclerView() {
-        recyclerView.setVisibility(View.VISIBLE);
-    }
 
     private void showErrorMessage() {
         recyclerView.setVisibility(View.INVISIBLE);
@@ -154,6 +167,11 @@ public class MainActivity extends AppCompatActivity implements movieAdapter.item
             getMovieData();
             return true;
         }
+        if (menuItemSelected == R.id.action_refresh) {
+            getMovieData();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
